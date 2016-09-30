@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Triangle Circle</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				background:#fff;
+				padding:0;
+				margin:0;
+				font-weight: bold;
+				overflow:hidden;
+			}
+		</style>
+	</head>
+	<body>
+
+		<script src="three.min.js"></script>
+		<script src="stats.js"></script>
+        <script src="OrbitControls.js"></script>
+
+		<script>
+            
+            // Programming Homework Assignment 3, Victor Bassey
+            
+            // global variables
+            var controls;
+            var renderer;
+            var camera;
+            var scene;
+            
+            // Sets up the scene.
+			init();
+            // Renders the scene and updates the render as needed.
+            animate();
+
+                
+			function init() {
+                
+                
+
+				container = document.createElement( 'div' );
+				document.body.appendChild( container );
+
+				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 100 );
+				camera.position.z = 10;
+               
+
+				scene = new THREE.Scene();
+                
+                
+                camera.lookAt(scene.position);
+
+                scene.add(camera);
+                
+               
+                
+                renderer = new THREE.WebGLRenderer();
+                // set the renderer to the size of the window itself
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                // set the renderer's background color to green
+                renderer.setClearColor(0x00FF00);
+                
+                // .domElement is a Canvas where the renderer draws its output. 
+                container.appendChild(renderer.domElement);
+                
+                controls = new THREE.OrbitControls(camera, renderer.domElement);
+                
+                var numTriangles = 100;
+                
+                renderer.setSize( window.innerWidth, window.innerHeight );
+                    document.body.appendChild( renderer.domElement );
+                    
+                    // angle of the triangle starting at the base
+                    var angle = 2 * Math.PI/numTriangles;
+                    // divide the triangle in half to get sides for calculating the x and y points
+                    var angleOver2 = angle / 2.0;
+                    var x = Math.sin(angleOver2);
+                    var y = Math.cos(angleOver2);
+                    
+                    console.log("x: " + x+ " y: " + y);
+                    
+                    // create the triangle
+                    var geom = new THREE.Geometry();
+                    var v1 = new THREE.Vector3(0,0,0);
+                    var v2 = new THREE.Vector3(-x,y,0);
+                    var v3 = new THREE.Vector3(x,y,0);
+                    
+                
+                    console.log(geom.vertices);
+                    geom.vertices.push(v1);
+                    geom.vertices.push(v2);
+                    geom.vertices.push(v3);
+
+                    
+                    geom.faces.push( new THREE.Face3( 0, 1, 2 ) );
+
+                    // render the amount of numTriangles
+                     for (var index=0; index < numTriangles; index++)
+                     {
+                        var triangleMat = new THREE.MeshBasicMaterial({color: randomColor(), side:THREE.DoubleSide});
+                        var mesh= new THREE.Mesh( geom, triangleMat);
+                        // since camera is looking in the negative z, this places the triangle slice in front of the camera.
+                        // Multiply by the index to rotate the angle by the index.
+                        mesh.position.z = 7;
+                        mesh.rotation.z = angle * index;
+                        // add the mesh to the scene
+                        scene.add(mesh);
+                     }
+                    renderer.render( scene, camera );
+
+				stats = new Stats();
+				container.appendChild( stats.dom );
+                
+
+
+			}
+            
+        function animate() 
+                {            
+
+				requestAnimationFrame( animate );
+
+				renderer.render(scene,camera);
+                controls.update();
+				stats.update();
+
+			     }
+            
+            // Generate a random color.
+            function randomColor()
+            {
+            var color = "rgb(" + Math.floor(Math.random() * 255) + ","+
+                      Math.floor(Math.random() * 255) + ","+
+                      Math.floor(Math.random() * 255) + ")";
+
+               return (new THREE.Color(color));
+            }
+
+		</script>
+
+	</body>
+</html>
