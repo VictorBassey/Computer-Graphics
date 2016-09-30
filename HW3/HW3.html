@@ -38,13 +38,14 @@
             function init() 
             {
                 
-				container = document.createElement( 'div' );
-				document.body.appendChild( container );
-
-				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 100 );
-				camera.position.z = 10;
-               
-				scene = new THREE.Scene();
+                container = document.createElement( 'div' );
+                
+                document.body.appendChild( container );
+                
+                camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 100 );
+                camera.position.z = 10;
+                
+                scene = new THREE.Scene();
                 
                 camera.lookAt(scene.position);
 
